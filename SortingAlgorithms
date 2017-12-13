@@ -1,0 +1,182 @@
+
+public class SortingBois {
+// method for easily printing arrays
+	static void printArr(int arr[]) {
+		for (int i=0; i < arr.length; i++) {
+			System.out.print(arr[i] + " ");
+		}
+	}
+	
+  // quickSort algorithm
+	static void quickSort(int arr[], int lo, int hi) {
+    // base case for array of size 0
+		if (lo >= hi) {
+			return;
+		}
+    // I chose the pivot to be the middle element, but you can make it anything
+		int pivot = arr[(hi+lo)/2];
+    // index around which to partition
+		int index = partition(arr, lo, hi, pivot);
+    // recursive calls for left of pivot and right of pivot
+		quickSort(arr, lo, index-1);
+		quickSort(arr, index, hi);
+	}
+  
+  // partition algorithm
+	static int partition(int arr[], int lo, int hi, int pivot) {
+    // i and j variables so lo and hi don't get overwritten
+		int i = lo, j = hi;
+    
+		while (i<=j) {
+      // move left index up until its element is greater than the pivot
+			while (arr[i] < pivot) {
+				i++;
+			}
+      // move right index down until its element is less than the pivot
+			while (arr[j] > pivot) {
+				j--;
+			}
+      // swap these elements if lo < hi
+			if (i<=j) {
+				swap(arr, i, j);
+				i++;
+				j--;
+			}
+		}
+		return i;
+	}
+  
+  // swap method
+	static void swap(int arr[], int lo, int hi) {
+		int temp = arr[lo];
+		arr[lo] = arr[hi];
+		arr[hi] = temp;
+	}
+	
+  // mergeSort algorithm
+	static void mergeSort(int arr[], int lo, int hi) {
+    // base case
+		if (lo>=hi) {
+			return;
+		}
+    // middle index
+		int m=(lo+hi)/2;
+    // recursively mergeSort first half and second half
+		mergeSort(arr,lo,m);
+		mergeSort(arr,m+1,hi);
+    // merge the two halfs together after they have been sorted
+		merge(arr,lo,hi,m);
+	}
+	
+  // merge alogrithm
+	static void merge(int arr[], int lo, int hi, int m) {
+		int n1 = m-lo+1;
+		int n2 = hi-m;
+    // create two subarrays to hold each half
+		int L[] = new int[n1];
+		int R[] = new int[n2];
+    // fill these subarrays
+		for (int i = 0; i <n1; i++) {
+			L[i] = arr[lo+i];
+		}
+		for (int i = 0; i < n2; i++) {
+			R[i] = arr[m+i+1];
+		}
+    // iterating variables
+		int i = 0, j = 0, k = lo;
+		while (i < n1 && j < n2) {
+      // checks the first element in each subarray and puts the lower one
+      // into the array at index k
+			if (L[i] <= R[j]) {
+				arr[k] = L[i];
+				i++;
+			}
+			else {
+				arr[k] = R[j];
+				j++;
+			}
+      // increment k
+			k++;
+		}
+    // fill the array with the remaining values
+		while (i < n1) {
+			arr[k] = L[i];
+			k++;
+			i++;
+		}
+		while (j < n2) {
+			arr[k] = R[j];
+			k++;
+			j++;
+		}
+	}
+	
+  // selectionSort algorithm
+	static void selectionSort(int arr[], int lo) {
+    // base case
+		if (lo>=arr.length-1) {
+			return;
+		}
+    // create variable for the index of the smallest element
+		int minIndex=lo;
+    // find the index of the smallest element
+		for (int i = lo+1; i < arr.length; i++) {
+			if (arr[i] < arr[minIndex]) {
+				minIndex = i;
+			}
+		}
+    // swap the smallest element with the element at 0
+		int temp = arr[lo];
+		arr[lo]=arr[minIndex];
+		arr[minIndex]=temp;
+    // recursively sort the array not including the left part (already sorted)
+		selectionSort(arr, lo+1);
+	}
+	
+  // insertionSort algorithm
+	static void insertionSort(int arr[], int n) {
+    // base case
+		if (n<=1) {
+			return;
+		}
+    // recursively sort the first n-1 elements of the array
+		insertionSort(arr, n-1);
+    // variable for the last array element
+		int last = arr[n-1];
+    // iterating variable
+		int i = n-2;
+		while (i >= 0 && arr[i] > last) {
+			arr[i+1] = arr[i];
+			i--;
+		}
+		arr[i+1] = last;
+	}
+	
+	public static void main(String[] args) {
+		int[] array1 = {8,3,10,5,3,9,2,9,12,1};
+		System.out.println("INSERTION SORT\nBefore:");
+		printArr(array1);
+		insertionSort(array1, 10);
+		System.out.println("\nAfter:");
+		printArr(array1);
+		int[] array2 = {3,2,9,4,6,10,2,30,6,5};
+		System.out.println("\n\nMERGE SORT\nBefore:");
+		printArr(array2);
+		mergeSort(array2, 0, 9);
+		System.out.println("\nAfter:");
+		printArr(array2);
+		int[] array3 = {7,3,9,2,12,4,7,4,20,3};
+		System.out.println("\n\nSELECTION SORT\nBefore:");
+		printArr(array3);
+		selectionSort(array3, 0);
+		System.out.println("\nAfter:");
+		printArr(array3);
+		int array4[] = {3,17,4,0,10,8,9,5,1,2};
+		System.out.println("\n\nQUICK SORT\nBefore:");
+		printArr(array4);
+		quickSort(array4, 0, 9);
+		System.out.println("\nAfter:");
+		printArr(array4);
+		
+	}
+}
